@@ -9,23 +9,24 @@ public class T3 implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println("F3");
+		System.out.println("Функція F3 - математичний вираз: O = SORT(P) * (MR * MT)");
 		
-		// O = SORT(P) * (MR * MT)
-		int sizeN = 10;
+		int n = 10;
 		
 		Data data = new Data();
 		
-		double[] P = data.generateVector();
-		double[][] MR = data.generateMatrix();
-		double[][] MT = data.generateMatrix();
+		int[] P = data.generateVector(n);
+		int[][] MR = data.generateMatrix(n);
+		int[][] MT = data.generateMatrix(n);
 		
 		Arrays.sort(P);
-		double[] O = DataMath.multiplyMatrixAndVector(sizeN, DataMath.multiplyMatrixes(sizeN, MR, MT), P);
+		int[] O = DataMath.multiplyMatrixAndVector(n, DataMath.multiplyMatrixes(n, MR, MT), P);
 		
-		for (int i = 0; i < sizeN; i++) {
-			System.out.println(O[i]);
+		System.out.println("Функція F3 - результуючий вектор:");
+		for (int i = 0; i < n; i++) {
+			System.out.print(O[i] + " ");
 		}
+		System.out.println();
 	}
 
 }

@@ -9,26 +9,30 @@ public class T1 implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("F1");
-
+		System.out.println("Функція F1 - математичний вираз: D = (SORT(A + B) + C) * (MA * MB)");
+		
 		// D = (SORT(A + B) + C) * (MA * MB)
-		int sizeN = 10;
+		
+		int n = 10;
 		
 		Data data = new Data();
-		double[] A = data.generateVector();
-		double[] B = data.generateVector();
-		double[] C = data.generateVector();
+		int[] A = data.generateVector(n);
+		int[] B = data.generateVector(n);
+		int[] C = data.generateVector(n);
 		
-		double[][] MA = data.generateMatrix();
-		double[][] MB = data.generateMatrix();
+		int[][] MA = data.generateMatrix(n);
+		int[][] MB = data.generateMatrix(n);
 
-		A = DataMath.addVectors(sizeN, A, B);
+		A = DataMath.addVectors(n, A, B);
 		Arrays.sort(A);
-		A = DataMath.addVectors(sizeN, A, C);		
-		double D[] = DataMath.multiplyMatrixAndVector(sizeN, DataMath.multiplyMatrixes(sizeN, MA, MB), A);
-		for (int i = 0; i < sizeN; i++) {
-			System.out.println(D[i]);
+		A = DataMath.addVectors(n, A, C);		
+		int D[] = DataMath.multiplyMatrixAndVector(n, DataMath.multiplyMatrixes(n, MA, MB), A);
+		
+		System.out.println("Функція F1 - результуючий вектор:");
+		for (int i = 0; i < n; i++) {
+			System.out.print(D[i] + " ");
 		}
+		System.out.println();
 
 	}
 

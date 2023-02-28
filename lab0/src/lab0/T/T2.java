@@ -7,19 +7,20 @@ public class T2 implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println("F2");
+		System.out.println("Функція F2 - математичний вираз: q = MAX(MH * MK - ML)");
 		
 		// q = MAX(MH * MK - ML)
-		int sizeN = 10;
+		int n = 10;
 		
 		Data data = new Data();
 		
-		double[][] MH = data.generateMatrix();
-		double[][] MK = data.generateMatrix();
-		double[][] ML = data.generateMatrix();
+		int[][] MH = data.generateMatrix(n);
+		int[][] MK = data.generateMatrix(n);
+		int[][] ML = data.generateMatrix(n);
 		
-		double q = DataMath.max(DataMath.substractMatrixes(sizeN, DataMath.multiplyMatrixes(sizeN, MH, MK), ML));
+		int q = DataMath.max(DataMath.substractMatrixes(n, DataMath.multiplyMatrixes(n, MH, MK), ML));
 		
+		System.out.println("Функція F1 - результуюче число:");
 		System.out.println(q);
 	}
 

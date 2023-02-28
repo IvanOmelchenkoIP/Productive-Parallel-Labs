@@ -5,54 +5,54 @@ import java.util.List;
 
 public class DataMath {
 
-	public static double[] addVectors(int N, double[] A, double[] B) {
-		double[] C = new double[N];
-		for (int i = 0; i < N; i++) {
+	public static int[] addVectors(int n, int[] A, int[] B) {
+		int[] C = new int[n];
+		for (int i = 0; i < n; i++) {
 			C[i] = A[i] + B[i];
 		}
 		return C;
 	}
 
-	public static double[] multiplyMatrixAndVector(int N, double[][] MA, double[] A) {
-		double[] B = new double[N];
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
+	public static int[] multiplyMatrixAndVector(int n, int[][] MA, int[] A) {
+		int[] B = new int[n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
 				B[i] += MA[i][j] * A[j];
 			}
 		}
 		return B;
 	}
 
-	public static double[][] substractMatrixes(int N, double[][] MA, double[][] MB) {
-		double[][] MC = new double[N][N];
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
+	public static int[][] substractMatrixes(int n, int[][] MA, int[][] MB) {
+		int[][] MC = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
 				MC[i][j] = MA[i][j] - MB[i][j];
 			}
 		}
 		return MC;
 	}
 
-	public static double[][] multiplyMatrixes(int N, double[][] MA, double[][] MB) {
-		double[][] MC = new double[N][N];
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				for (int k = 0; k < N; k++)
+	public static int[][] multiplyMatrixes(int n, int[][] MA, int[][] MB) {
+		int[][] MC = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				for (int k = 0; k < n; k++)
 					MC[i][j] += MA[i][k] * MB[k][j];
 			}
 		}
 		return MC;
 	}
 
-	public static double max(double[][] MA) {
-		List<Double> B = new ArrayList<Double>();
-		for (double[] A : MA) {
-			for (double a : A) {
+	public static int max(int[][] MA) {
+		List<Integer> B = new ArrayList<Integer>();
+		for (int[] A : MA) {
+			for (int a : A) {
 				B.add(a);
 			}
 		}
-		double max = B.remove(0);
-		for (double b : B) {
+		int max = B.remove(0);
+		for (int b : B) {
 			if (b > max) {
 				max = b;
 			}
