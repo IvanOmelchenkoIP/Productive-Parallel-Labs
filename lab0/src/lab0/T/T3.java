@@ -1,10 +1,7 @@
 package lab0.T;
 
-import java.util.Arrays;
-
-import lab0.Data.Data;
-import lab0.Data.DataMath;
 import lab0.Data.MatrixData;
+import lab0.Data.UserInputProcessor;
 import lab0.Data.VectorData;
 
 public class T3 implements Runnable {
@@ -13,21 +10,27 @@ public class T3 implements Runnable {
 	public void run() {
 		VectorData vd = new VectorData();
 		MatrixData md = new MatrixData();
-		
+		UserInputProcessor ui = new UserInputProcessor();
+
 		System.out.println("Функція F3 - математичний вираз: O = SORT(P) * (MR * MT)");
 		
-		int n = 10;
+		int n = ui.getUserN();
 		
 		// O = SORT(P)*(MR*MT)
 		
-		Data data = new Data();
-		
-		int[] P = data.generateVector(n);
-		int[][] MR = data.generateMatrix(n);
-		int[][] MT = data.generateMatrix(n);
-		
-		//Arrays.sort(P);
-		//int[] O = DataMath.multiplyMatrixAndVector(n, DataMath.multiplyMatrixes(n, MR, MT), P);
+		int[] P;
+		int[][] MR;
+		int[][] MT;
+		try {
+			P = ui.createVector(n, "P");
+			MR = ui.createMatrix(n, "MR");
+			MT = ui.createMatrix(n, "MT");
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return;
+		} finally {
+			ui.close();
+		}
 		
 		int[] O = vd.getMatrixMultiplyProduct(vd.sort(P), md.getMatrixMultiplyProduct(MR, MT, n), n);
 		
