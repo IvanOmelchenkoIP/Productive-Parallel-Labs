@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class FileReader {
+	
 	public String read(String filepath) throws IOException {
 		DataInputStream stream = null;
 		try {
