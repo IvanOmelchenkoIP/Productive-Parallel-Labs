@@ -23,21 +23,21 @@ public class DataMath {
 		return B;
 	}
 
-	public static int[][] substractMatrixes(int n, int[][] MA, int[][] MB) {
-		int[][] MC = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
+	public static int[][] substractMatrixes(int[][] MA, int[][] MB, int size) {
+		int[][] MC = new int[size][size];
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
 				MC[i][j] = MA[i][j] - MB[i][j];
 			}
 		}
 		return MC;
 	}
 
-	public static int[][] multiplyMatrixes(int n, int[][] MA, int[][] MB) {
-		int[][] MC = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				for (int k = 0; k < n; k++)
+	public static int[][] multiplyMatrixes(int[][] MA, int[][] MB, int size) {
+		int[][] MC = new int[size][size];
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				for (int k = 0; k < size; k++)
 					MC[i][j] += MA[i][k] * MB[k][j];
 			}
 		}
@@ -59,4 +59,7 @@ public class DataMath {
 		}
 		return max;
 	}
+	
+	
+	
 }
