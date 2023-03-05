@@ -38,6 +38,6 @@ public class Lab0 {
 			t3.join();	
 		} catch (InterruptedException ex) {
 			System.out.println("Виконання потоку T3 було перерване: " + ex.getMessage());
-		}		
+		}
 	}
 }

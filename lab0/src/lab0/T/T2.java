@@ -23,10 +23,8 @@ public class T2 extends Thread {
 		UserInputProcessor ui = new UserInputProcessor();
 
 		System.out.println("Функція F2 - математичний вираз: q = MAX(MH * MK - ML)");
-		
-		// q = MAX(MH * MK - ML)
-		int n = ui.getUserN();
-		
+
+		int n = ui.getUserN("F2");
 		int[][] MH;
 		int[][] MK;
 		int[][] ML;
@@ -43,7 +41,7 @@ public class T2 extends Thread {
 			
 		int q = md.max(md.getMatrixDifference(md.getMatrixMultiplyProduct(MH, MK, n), ML, n));
 		
-		System.out.println("Функція F1 - результуюче число:");
+		System.out.println("Функція F2 - результуюче число:");
 		System.out.println(q);
 	}
 

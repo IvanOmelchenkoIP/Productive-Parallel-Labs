@@ -24,12 +24,8 @@ public class T1 extends Thread {
 		MatrixData md = new MatrixData();
 		UserInputProcessor ui = new UserInputProcessor();
 		
-		System.out.println("Функція F1 - математичний вираз: D = (SORT(A + B) + C) * (MA * MB)");
-		
-		// D = (SORT(A + B) + C) * (MA * MB)
-		
-		int n = ui.getUserN();
-		
+		System.out.println("Функція F1 - математичний вираз: D = (SORT(A + B) + C) * (MA * MB)");	
+		int n = ui.getUserN("F1");
 		int[] A;
 		int[] B;
 		int[] C;
@@ -49,7 +45,7 @@ public class T1 extends Thread {
 		}
 		
 		int[] D =  vd.getMatrixMultiplyProduct(vd.getVectorSum(vd.sort(vd.getVectorSum(A, B, n)), C, n), md.getMatrixMultiplyProduct(MA, MB, n), n);		
-		
+
 		System.out.println("Функція F1 - результуючий вектор:");
 		for (int i = 0; i < n; i++) {
 			System.out.print(D[i] + " ");

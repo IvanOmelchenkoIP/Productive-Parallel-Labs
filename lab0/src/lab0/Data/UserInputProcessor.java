@@ -27,7 +27,8 @@ public class UserInputProcessor {
 		scanner = new Scanner(System.in);
 	}
 	
-	public int getUserN() {
+	public int getUserN(String func) {
+		System.out.println("Введіть розмірність векторів та матриць для функції " + func + ": ");
 		return scanner.nextInt();
 	}
 	

@@ -21,8 +21,8 @@ public class MatrixData {
 
 	public int[][] generateRandom(int size) {
 		int[][] MA = new int[size][size];
-		for (int i = 0; i < 10; i ++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < size; i ++) {
+			for (int j = 0; j < size; j++) {
 				MA[i][j] = ThreadLocalRandom.current().nextInt();
 			}
 		}

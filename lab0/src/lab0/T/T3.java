@@ -26,10 +26,7 @@ public class T3 extends Thread {
 
 		System.out.println("Функція F3 - математичний вираз: O = SORT(P) * (MR * MT)");
 		
-		int n = ui.getUserN();
-		
-		// O = SORT(P)*(MR*MT)
-		
+		int n = ui.getUserN("F3");		
 		int[] P;
 		int[][] MR;
 		int[][] MT;
