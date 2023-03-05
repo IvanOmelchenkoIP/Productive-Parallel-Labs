@@ -4,7 +4,7 @@ import lab0.Data.MatrixData;
 import lab0.Data.UserInputProcessor;
 import lab0.Data.VectorData;
 
-public class T1 implements Runnable {
+public class T1 extends Thread {
 
 	@Override
 	public void run() {

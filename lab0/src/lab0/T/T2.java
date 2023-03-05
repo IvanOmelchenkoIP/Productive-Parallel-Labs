@@ -3,7 +3,7 @@ package lab0.T;
 import lab0.Data.MatrixData;
 import lab0.Data.UserInputProcessor;
 
-public class T2 implements Runnable {
+public class T2 extends Thread {
 	
 	@Override
 	public void run() {
