@@ -15,22 +15,22 @@ package lab0.Data;
 import java.util.Arrays;
 
 public class Vector {
-	private int size;
+	private int N;
 	private int[] data;
 	
 	public Vector(int[] data) {
 		this.data = data;
-		this.size = data.length;
+		this.N = data.length;
 	}
 	
 	public int[] getData() {
 		return data;
 	}
 	
-	public static Vector fromString(String vector, int size) {
-		int[] data = new int[size];
+	public static Vector fromString(String vector, int N) {
+		int[] data = new int[N];
 		String[] elements = vector.trim().split("");
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < N; i++) {
 			data[i] = Integer.parseInt(elements[i]);
 		}
 		return new Vector(data);
@@ -48,8 +48,8 @@ public class Vector {
 	
 	public Vector getVectorSum(Vector B) {
 		int[] dataB = B.getData();
-		int[] dataC = new int[size];
-		for (int i = 0; i < size; i++) {
+		int[] dataC = new int[N];
+		for (int i = 0; i < N; i++) {
 			dataC[i] = data[i] + dataB[i];
 		}
 		return new Vector(dataC);
@@ -57,9 +57,9 @@ public class Vector {
 	
 	public Vector getMatrixMultiplyProduct(Matrix MA) {
 		int[][] dataMA = MA.getData();
-		int[] dataB = new int[size];
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		int[] dataB = new int[N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
 				dataB[i] += dataMA[i][j] * data[j];
 			}
 		}

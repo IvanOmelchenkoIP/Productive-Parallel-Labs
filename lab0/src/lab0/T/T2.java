@@ -25,14 +25,14 @@ public class T2 extends Thread {
 		Data data = new Data("F2");
 
 		System.out.println("Функція F2 - математичний вираз: q = MAX(MH * MK - ML)");
-		int n = data.getUserN();
+		int N = data.getUserN();
 		Matrix MH;
 		Matrix MK;
 		Matrix ML;
 		try {
-			MH = data.createMatrix("MH", n);
-			MK = data.createMatrix("MK", n);
-			ML = data.createMatrix("ML", n);
+			MH = data.createMatrix("MH", N);
+			MK = data.createMatrix("MK", N);
+			ML = data.createMatrix("ML", N);
 		} catch (IOException ex) {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при зчитувані файлу: " + ex.getMessage());
 			return;

@@ -25,18 +25,18 @@ public class T1 extends Thread {
 		Data data = new Data("F1");
 
 		System.out.println("Функція F1 - математичний вираз: D = (SORT(A + B) + C) * (MA * MB)");	
-		int n = data.getUserN();
+		int N = data.getUserN();
 		Vector A;
 		Vector B;
 		Vector C;
 		Matrix MA;
 		Matrix MB;
 		try {
-			A = data.createVector("A", n);
-			B = data.createVector("B", n);
-			C = data.createVector("C", n);
-			MA = data.createMatrix("MA", n);
-			MB = data.createMatrix("MB", n);
+			A = data.createVector("A", N);
+			B = data.createVector("B", N);
+			C = data.createVector("C", N);
+			MA = data.createMatrix("MA", N);
+			MB = data.createMatrix("MB", N);
 		} catch (IOException ex) {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при зчитувані файлу: " + ex.getMessage());
 			return;

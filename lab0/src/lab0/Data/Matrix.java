@@ -17,24 +17,24 @@ import java.util.Collections;
 import java.util.List;
 
 public class Matrix {
-	private int size;
+	private int N;
 	private int[][] data;
 	
 	public Matrix(int[][] data) {
 		this.data = data;
-		this.size = data.length;
+		this.N = data.length;
 	}
 	
 	public int[][] getData() {
 		return data;
 	}
 	
-	public static Matrix fromString(String matrix, int size) {
-		int[][] data = new int[size][size];		
+	public static Matrix fromString(String matrix, int N) {
+		int[][] data = new int[N][N];		
 		String[] lines = matrix.trim().split("\n");
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < N; i++) {
 			String[] elements = lines[i].split(" ");
-			for (int j = 0; j < size; j++) {
+			for (int j = 0; j < N; j++) {
 				data[i][j] = Integer.parseInt(elements[j]);
 			}
 		}
@@ -55,9 +55,9 @@ public class Matrix {
 	
 	public Matrix getMatrixDifference(Matrix MB) {
 		int[][] dataMB = MB.getData();
-		int[][] dataMC = new int[size][size];
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		int[][] dataMC = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
 				dataMC[i][j] = data[i][j] - dataMB[i][j];
 			}
 		}
@@ -66,10 +66,10 @@ public class Matrix {
 
 	public Matrix getMatrixMultiplyProduct(Matrix MB) {
 		int[][] dataMB = MB.getData();
-		int[][] dataMC = new int[size][size];
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				for (int k = 0; k < size; k++)
+		int[][] dataMC = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				for (int k = 0; k < N; k++)
 					dataMC[i][j] += data[i][k] * dataMB[k][j];
 			}
 		}

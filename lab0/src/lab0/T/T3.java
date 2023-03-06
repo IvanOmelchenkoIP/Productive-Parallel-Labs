@@ -25,14 +25,14 @@ public class T3 extends Thread {
 		Data data = new Data("F3");
 
 		System.out.println("Функція F3 - математичний вираз: O = SORT(P) * (MR * MT)");
-		int n = data.getUserN();		
+		int N = data.getUserN();		
 		Vector P;
 		Matrix MR;
 		Matrix MT;
 		try {
-			P = data.createVector("P", n);
-			MR = data.createMatrix("MR", n);
-			MT = data.createMatrix("MT", n);
+			P = data.createVector("P", N);
+			MR = data.createMatrix("MR", N);
+			MT = data.createMatrix("MT", N);
 		} catch (IOException ex) {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при зчитувані файлу: " + ex.getMessage());
 			return;
