@@ -1,3 +1,15 @@
+/*
+ * Лабораторна робота 0 ЛР0, Варіанти - 1.14, 2.23, 3.3
+ * F1: D = (SORT(A + B) + C) * (MA * MB)
+ * F2: q = MAX(MH * MK - ML)
+ * F3: O = SORT(P)*(MR*MT)
+ * Омельченко І. ІП-04
+ * Дата відправлення: 07.03.2023 
+ * 
+ * файл: ./src/lab0/Data/Vector.java
+ * Даний файл містить тип даних Vector
+ */
+
 package lab0.Data;
 
 import java.util.Arrays;
