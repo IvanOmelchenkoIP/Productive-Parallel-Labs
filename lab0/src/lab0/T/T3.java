@@ -12,42 +12,40 @@
 
 package lab0.T;
 
-import lab0.Data.MatrixData;
-import lab0.Data.UserInputProcessor;
-import lab0.Data.VectorData;
+import java.io.IOException;
+
+import lab0.Data.Data;
+import lab0.Data.Vector;
+import lab0.Data.Matrix;
 
 public class T3 extends Thread {
 	
 	@Override
 	public void run() {
-		VectorData vd = new VectorData();
-		MatrixData md = new MatrixData();
-		UserInputProcessor ui = new UserInputProcessor();
+		Data data = new Data("F3");
 
 		System.out.println("Функція F3 - математичний вираз: O = SORT(P) * (MR * MT)");
-		
-		int n = ui.getUserN("F3");		
-		int[] P;
-		int[][] MR;
-		int[][] MT;
+		int n = data.getUserN();		
+		Vector P;
+		Matrix MR;
+		Matrix MT;
 		try {
-			P = ui.createVector(n, "P");
-			MR = ui.createMatrix(n, "MR");
-			MT = ui.createMatrix(n, "MT");
+			P = data.createVector("P", n);
+			MR = data.createMatrix("MR", n);
+			MT = data.createMatrix("MT", n);
+		} catch (IOException ex) {
+			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при зчитувані файлу: " + ex.getMessage());
+			return;
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		} finally {
-			ui.close();
+			data.closeInput();
 		}
-		
-		int[] O = vd.getMatrixMultiplyProduct(vd.sort(P), md.getMatrixMultiplyProduct(MR, MT, n), n);
-		
+		Vector O = P.sort().getMatrixMultiplyProduct(MR.getMatrixMultiplyProduct(MT));
+						
 		System.out.println("Функція F3 - результуючий вектор:");
-		for (int i = 0; i < n; i++) {
-			System.out.print(O[i] + " ");
-		}
-		System.out.println();
+		System.out.println(O.toString());
 	}
 
 }

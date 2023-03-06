@@ -12,37 +12,40 @@
 
 package lab0.T;
 
-import lab0.Data.MatrixData;
-import lab0.Data.UserInputProcessor;
+import java.io.IOException;
+
+import lab0.Data.Data;
+import lab0.Data.Matrix;
+
 
 public class T2 extends Thread {
 	
 	@Override
 	public void run() {
-		MatrixData md = new MatrixData();
-		UserInputProcessor ui = new UserInputProcessor();
+		Data data = new Data("F2");
 
 		System.out.println("Функція F2 - математичний вираз: q = MAX(MH * MK - ML)");
-
-		int n = ui.getUserN("F2");
-		int[][] MH;
-		int[][] MK;
-		int[][] ML;
+		int n = data.getUserN();
+		Matrix MH;
+		Matrix MK;
+		Matrix ML;
 		try {
-			MH = ui.createMatrix(n, "MH");
-			MK = ui.createMatrix(n, "MK");
-			ML = ui.createMatrix(n, "ML");
+			MH = data.createMatrix("MH", n);
+			MK = data.createMatrix("MK", n);
+			ML = data.createMatrix("ML", n);
+		} catch (IOException ex) {
+			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при зчитувані файлу: " + ex.getMessage());
+			return;
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		} finally {
-			ui.close();
+			data.closeInput();
 		}
-			
-		int q = md.max(md.getMatrixDifference(md.getMatrixMultiplyProduct(MH, MK, n), ML, n));
-		
+		int q = MH.getMatrixMultiplyProduct(MK).getMatrixDifference(ML).max();
+						
 		System.out.println("Функція F2 - результуюче число:");
-		System.out.println(q);
+		System.out.println(q + "\n");
 	}
 
 }

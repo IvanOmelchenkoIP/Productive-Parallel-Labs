@@ -12,44 +12,43 @@
 
 package lab0.T;
 
-import lab0.Data.MatrixData;
-import lab0.Data.UserInputProcessor;
-import lab0.Data.VectorData;
+import java.io.IOException;
+
+import lab0.Data.Data;
+import lab0.Data.Vector;
+import lab0.Data.Matrix;
 
 public class T1 extends Thread {
 
 	@Override
-	public void run() {
-		VectorData vd = new VectorData();
-		MatrixData md = new MatrixData();
-		UserInputProcessor ui = new UserInputProcessor();
-		
+	public void run() {	
+		Data data = new Data("F1");
+
 		System.out.println("Функція F1 - математичний вираз: D = (SORT(A + B) + C) * (MA * MB)");	
-		int n = ui.getUserN("F1");
-		int[] A;
-		int[] B;
-		int[] C;
-		int[][] MA;
-		int[][] MB;
+		int n = data.getUserN();
+		Vector A;
+		Vector B;
+		Vector C;
+		Matrix MA;
+		Matrix MB;
 		try {
-			A = ui.createVector(n, "A");
-			B = ui.createVector(n, "B");
-			C = ui.createVector(n, "C");
-			MA = ui.createMatrix(n, "MA");
-			MB = ui.createMatrix(n, "MB");
+			A = data.createVector("A", n);
+			B = data.createVector("B", n);
+			C = data.createVector("C", n);
+			MA = data.createMatrix("MA", n);
+			MB = data.createMatrix("MB", n);
+		} catch (IOException ex) {
+			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при зчитувані файлу: " + ex.getMessage());
+			return;
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		} finally {
-			ui.close();
+			data.closeInput();
 		}
+		Vector D =  A.getVectorSum(B).sort().getVectorSum(C).getMatrixMultiplyProduct(MA.getMatrixMultiplyProduct(MB));
 		
-		int[] D =  vd.getMatrixMultiplyProduct(vd.getVectorSum(vd.sort(vd.getVectorSum(A, B, n)), C, n), md.getMatrixMultiplyProduct(MA, MB, n), n);		
-
 		System.out.println("Функція F1 - результуючий вектор:");
-		for (int i = 0; i < n; i++) {
-			System.out.print(D[i] + " ");
-		}
-		System.out.println();
+		System.out.println(D.toString());
 	}
 }
