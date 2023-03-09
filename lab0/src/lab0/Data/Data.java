@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Data {
 	
-	private static final int MAX_SMALL_N = 4;
+	private int maxSmallN;
 	
 	private String fnName;
 	private MatrixData md;
@@ -35,33 +35,34 @@ public class Data {
 	private int fillNumber;
 	private int dataGeneration;
 	
-	public Data(String fnName) {
+	public Data(String fnName, int maxSmallN) {
 		this.fnName = fnName;
+		this.maxSmallN = maxSmallN;
 		this.md = new MatrixData();
 		this.vd = new VectorData();
 		this.fr = new FileReader();
 		this.ui = new UserInputScanner();
 	}
 	
-	public void setUserInputType() throws IOException, Exception {
+	public int setUserInputType() throws IOException, Exception {
 		N = ui.getUserN(fnName);
-		if (N <= MAX_SMALL_N) {
+		if (N <= maxSmallN) {
 			dataGeneration = DataGenerationTypes.USER_INPUT;
-			return;
+			return N;
 		}
 		dataGeneration = ui.scanDataGenerationType();
 		switch(dataGeneration) {
 		case DataGenerationTypes.READ_FILE -> { fileContents = fr.read(ui.scanFilename()); }
-		case DataGenerationTypes.GENERATE_RANDOM -> { return; }
+		case DataGenerationTypes.GENERATE_RANDOM -> { break; }
 		case DataGenerationTypes.FILL_WITH_NUMBER -> { fillNumber = ui.scanFillNumber(); }
 		default -> { throw new Exception("Невірний вибір при виборі методу заповнення матриці!"); }	
 		}
+		return N;
 	}
 	
 	public Matrix createMatrix(String name) throws Exception {
-		System.out.println("Функція " + fnName + ". Ввід матриці " + name + ": ");
 		switch(dataGeneration) {
-		case DataGenerationTypes.USER_INPUT -> { return new Matrix(ui.getMatrixFromInput(name, N)); }
+		case DataGenerationTypes.USER_INPUT -> { return new Matrix(ui.getMatrixFromInput(fnName, name, N)); }
 		case DataGenerationTypes.READ_FILE -> { return Matrix.fromString(md.getFromFileInput(fileContents, N, name), N); }
 		case DataGenerationTypes.GENERATE_RANDOM -> { return new Matrix(md.generateRandom(N)); }
 		case DataGenerationTypes.FILL_WITH_NUMBER -> { return new Matrix(md.fillWithNumber(N, fillNumber)); }
@@ -70,18 +71,13 @@ public class Data {
 	}
 	
 	public Vector createVector(String name) throws Exception {
-		System.out.println("Функція " + fnName + ". Ввід вектора " + name + ": ");
 		switch(dataGeneration) {
-		case DataGenerationTypes.USER_INPUT -> { return new Vector(ui.getVectorFromInput(name, N)); }
+		case DataGenerationTypes.USER_INPUT -> { return new Vector(ui.getVectorFromInput(fnName, name, N)); }
 		case DataGenerationTypes.READ_FILE -> { return Vector.fromString(vd.getFromFileInput(fileContents, N, name), N); }
 		case DataGenerationTypes.GENERATE_RANDOM -> { return new Vector(vd.generateRandom(N)); }
 		case DataGenerationTypes.FILL_WITH_NUMBER -> { return new Vector(vd.fillWithNumber(N, fillNumber)); }
 		default -> { throw new Exception("Вектор " + name + " не може бути згенерованим!"); }
 		}
-	}
-	
-	public void closeInput() {
-		ui.close();
 	}
 }
 
@@ -170,15 +166,20 @@ class UserInputScanner {
 		return scanner.nextInt();
 	}
 	
-	int[][] getMatrixFromInput(String name, int N) {
+	int[][] getMatrixFromInput(String fnName, String name, int N) {
+		System.out.println("Функція " + fnName + ". Ввід матриці" + name + ": ");
 		int[][] MA = new int[N][N];
 		for (int i = 0; i < N; i++) {
-			MA[i] = getVectorFromInput(name.toLowerCase() + (i + 1), N);
+			for (int j = 0; j < N; j++) {
+				System.out.print("Введіть елемент " + name.toLowerCase() + (i + 1) + (j + 1) + ": ");
+				MA[i][j] = scanNumber();
+			}		
 		}
 		return MA;
 	}
 	
-	int[] getVectorFromInput(String name, int N) {
+	int[] getVectorFromInput(String fnName, String name, int N) {
+		System.out.println("Функція " + fnName + ". Ввід вектора " + name + ": ");
 		int[] A = new int[N];
 		for (int i = 0; i < N; i++) {
 			System.out.print("Введіть елемент " + name.toLowerCase() + (i + 1) + ": ");
@@ -188,7 +189,7 @@ class UserInputScanner {
 	}
 	
 	int scanDataGenerationType() {
-		System.out.println("Виберіть спосіб вводу даних:\n1 - зчитати матрицю з файлу\n2 - згенерувати випадкову матрицю\n3 - заповнити матрицю числом\n> ");
+		System.out.print("Виберіть спосіб вводу даних:\n1 - зчитати матрицю з файлу\n2 - згенерувати випадкову матрицю\n3 - заповнити матрицю числом\n> ");
 		return scanNumber();
 	}
 	
@@ -200,10 +201,6 @@ class UserInputScanner {
 	int scanFillNumber() {
 		System.out.print("Введіть число для заповнення структур даних: ");
 		return scanNumber();
-	}
-	
-	void close() {
-		scanner.close();
 	}
 	
 	private int scanNumber() {

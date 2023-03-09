@@ -13,6 +13,7 @@
 package lab0.T;
 
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import lab0.Data.Data;
 import lab0.Data.Vector;
@@ -20,30 +21,49 @@ import lab0.Data.Matrix;
 
 public class T3 extends Thread {
 
+	private int maxSmallN;
+	private Semaphore inOutSemaphore;
+	
+	public T3(Semaphore inOutSemaphore, int maxSmallN) {
+		this.inOutSemaphore = inOutSemaphore;
+		this.maxSmallN = maxSmallN;
+	}
+	
 	@Override
 	public void run() {
-		Data data = new Data("F3");
+		Data data = new Data("F3", maxSmallN);
+		int N;
 		Vector P;
 		Matrix MR;
 		Matrix MT;
 		
+		try {
+			inOutSemaphore.acquire();
+		} catch (InterruptedException ex) {
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+			return;
+		}
+		
 		System.out.println("Функція F3 - математичний вираз: O = SORT(P)*(MR*MT)");
 		try {
-			data.setUserInputType();
+			N = data.setUserInputType();
 		} catch (IOException ex) {
 			System.out.println("Потік Т3 - неможливо продовжити виконання! Помилка при читанні файлу: " + ex.getMessage());
 			return;
 		} catch (Exception ex) {
 			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
-			data.closeInput();
 			return;
 		}
 
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException ex) {
-			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
-			return;
+		inOutSemaphore.release();
+		
+		if (N <= maxSmallN) {
+			try {
+				inOutSemaphore.acquire();
+			} catch (InterruptedException ex) {
+				System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+				return;
+			}
 		}
 
 		try {
@@ -53,30 +73,25 @@ public class T3 extends Thread {
 		} catch (Exception ex) {
 			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
-		} finally {
-			data.closeInput();
 		}
-
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException ex) {
-			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
-			return;
+		
+		if (!inOutSemaphore.tryAcquire()) {
+			inOutSemaphore.release();
 		}
 
 		Vector O = P.sort().getMatrixMultiplyProduct(MR.getMatrixMultiplyProduct(MT));
 
 		try {
-			Thread.sleep(500);
+			inOutSemaphore.acquire();
 		} catch (InterruptedException ex) {
-			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		Thread.yield();
-
+		
 		System.out.println("Функція F3 - результуючий вектор:");
 		System.out.println(O.toString());
-		System.out.println("Виконання потоку T3 завершено...");
+		System.out.println("Виконання потоку T3 завершено...\n");
 
+		inOutSemaphore.release();
 	}
 }
