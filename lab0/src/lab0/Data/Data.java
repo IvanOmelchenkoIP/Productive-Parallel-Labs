@@ -4,7 +4,7 @@
  * F2: q = MAX(MH * MK - ML)
  * F3: O = SORT(P)*(MR*MT)
  * Омельченко І. ІП-04
- * Дата відправлення: 07.03.2023 
+ * Дата відправлення: 10.03.2023 
  * 
  * файл: ./src/lab0/Data/Data.java
  * Даний файл містить модуль Data, що необхідний для отримання даних для виконання потоків, а також допоміжні класи
@@ -30,6 +30,11 @@ public class Data {
 	private FileReader fr;
 	private UserInputScanner ui;
 	
+	private int N;
+	private String fileContents;
+	private int fillNumber;
+	private int dataGeneration;
+	
 	public Data(String fnName) {
 		this.fnName = fnName;
 		this.md = new MatrixData();
@@ -38,49 +43,40 @@ public class Data {
 		this.ui = new UserInputScanner();
 	}
 	
-	public int getUserN() {
-		return ui.getUserN(fnName);
-	}
-	
-	public Matrix createMatrix(String name, int N) throws IOException, Exception {
-		System.out.println("Ввід матриці " + name + ": ");
+	public void setUserInputType() throws IOException, Exception {
+		N = ui.getUserN(fnName);
 		if (N <= MAX_SMALL_N) {
-			return new Matrix(ui.getMatrixFromInput(name, N));
+			dataGeneration = DataGenerationTypes.USER_INPUT;
+			return;
 		}
-		System.out.print("Введіть:\n1 - зчитати матрицю з файлу\n2 - згенерувати випадкову матрицю\n3 - заповнити матрицю числом\n> ");
-		int choice = ui.scanNumber();
-		switch(choice) {
-		case EnterChoices.READ_FILE: 
-			System.out.print("Введіть назву файлу: ");
-			return Matrix.fromString(md.getFromFileInput(fr.read(ui.scanLine()), N, name), N);
-		case EnterChoices.GENERATE_RANDOM:
-			return new Matrix(md.generateRandom(N));
-		case EnterChoices.FILL_WITH_NUMBER:
-			System.out.print("Введіть число для заповнення матриці: ");
-			return new Matrix(md.fillWithNumber(N, ui.scanNumber()));
-		default:
-			throw new Exception("Невірний вибір при виборі методу заповнення матриці!");
+		dataGeneration = ui.scanDataGenerationType();
+		switch(dataGeneration) {
+		case DataGenerationTypes.READ_FILE -> { fileContents = fr.read(ui.scanFilename()); }
+		case DataGenerationTypes.GENERATE_RANDOM -> { return; }
+		case DataGenerationTypes.FILL_WITH_NUMBER -> { fillNumber = ui.scanFillNumber(); }
+		default -> { throw new Exception("Невірний вибір при виборі методу заповнення матриці!"); }	
 		}
 	}
 	
-	public Vector createVector(String name, int N) throws IOException, Exception {
-		System.out.println("Ввід вектора " + name + ": ");
-		if (N <= MAX_SMALL_N) {
-			return new Vector(ui.getVectorFromInput(name, N));
-		}		
-		System.out.println("Введіть:\n1 - зчитати вектор з файлу\n2 - згенерувати випадковий вектор\n3 - заповнити вектор числом");
-		int choice = ui.scanNumber();
-		switch(choice) {
-		case EnterChoices.READ_FILE: 
-			System.out.print("Введіть назву файлу: ");
-			return Vector.fromString(vd.getFromFileInput(fr.read(ui.scanLine()), N, name), N);
-		case EnterChoices.GENERATE_RANDOM:
-			return new Vector(vd.generateRandom(N));
-		case EnterChoices.FILL_WITH_NUMBER:
-			System.out.print("Введіть число для заповнення вектора: ");
-			return new Vector(vd.fillWithNumber(N, ui.scanNumber()));
-		default:
-			throw new Exception("Невірний вибір при виборі методу заповнення вектора!");
+	public Matrix createMatrix(String name) throws Exception {
+		System.out.println("Функція " + fnName + ". Ввід матриці " + name + ": ");
+		switch(dataGeneration) {
+		case DataGenerationTypes.USER_INPUT -> { return new Matrix(ui.getMatrixFromInput(name, N)); }
+		case DataGenerationTypes.READ_FILE -> { return Matrix.fromString(md.getFromFileInput(fileContents, N, name), N); }
+		case DataGenerationTypes.GENERATE_RANDOM -> { return new Matrix(md.generateRandom(N)); }
+		case DataGenerationTypes.FILL_WITH_NUMBER -> { return new Matrix(md.fillWithNumber(N, fillNumber)); }
+		default -> { throw new Exception("Матриця " + name + " не може бути згенерована!"); }
+		}
+	}
+	
+	public Vector createVector(String name) throws Exception {
+		System.out.println("Функція " + fnName + ". Ввід вектора " + name + ": ");
+		switch(dataGeneration) {
+		case DataGenerationTypes.USER_INPUT -> { return new Vector(ui.getVectorFromInput(name, N)); }
+		case DataGenerationTypes.READ_FILE -> { return Vector.fromString(vd.getFromFileInput(fileContents, N, name), N); }
+		case DataGenerationTypes.GENERATE_RANDOM -> { return new Vector(vd.generateRandom(N)); }
+		case DataGenerationTypes.FILL_WITH_NUMBER -> { return new Vector(vd.fillWithNumber(N, fillNumber)); }
+		default -> { throw new Exception("Вектор " + name + " не може бути згенерованим!"); }
 		}
 	}
 	
@@ -157,8 +153,8 @@ class FileReader {
 	}
 }
 
-class EnterChoices {
-	static final int READ_FILE = 1, GENERATE_RANDOM = 2, FILL_WITH_NUMBER = 3;
+class DataGenerationTypes {
+	static final int USER_INPUT = 0, READ_FILE = 1, GENERATE_RANDOM = 2, FILL_WITH_NUMBER = 3;
 }
 
 class UserInputScanner {
@@ -191,15 +187,30 @@ class UserInputScanner {
 		return A;
 	}
 	
-	int scanNumber() {
-		return scanner.nextInt();
+	int scanDataGenerationType() {
+		System.out.println("Виберіть спосіб вводу даних:\n1 - зчитати матрицю з файлу\n2 - згенерувати випадкову матрицю\n3 - заповнити матрицю числом\n> ");
+		return scanNumber();
 	}
 	
-	String scanLine() {
-		return scanner.nextLine();
+	String scanFilename() {
+		System.out.print("Введіть назву файлу: ");
+		return scanLine();
+	}
+	
+	int scanFillNumber() {
+		System.out.print("Введіть число для заповнення структур даних: ");
+		return scanNumber();
 	}
 	
 	void close() {
 		scanner.close();
+	}
+	
+	private int scanNumber() {
+		return scanner.nextInt();
+	}
+	
+	private String scanLine() {
+		return scanner.nextLine();
 	}
 }

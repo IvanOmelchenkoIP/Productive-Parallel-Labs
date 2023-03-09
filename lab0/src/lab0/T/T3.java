@@ -4,7 +4,7 @@
  * F2: q = MAX(MH * MK - ML)
  * F3: O = SORT(P)*(MR*MT)
  * Омельченко І. ІП-04
- * Дата відправлення: 07.03.2023 
+ * Дата відправлення: 10.03.2023 
  * 
  * файл: ./src/lab0/T/T3.java
  * Даний файл містить клас потоку T3 для обчислення функції F3: O = SORT(P)*(MR*MT)
@@ -19,33 +19,64 @@ import lab0.Data.Vector;
 import lab0.Data.Matrix;
 
 public class T3 extends Thread {
-	
+
 	@Override
 	public void run() {
 		Data data = new Data("F3");
-
-		System.out.println("Функція F3 - математичний вираз: O = SORT(P) * (MR * MT)");
-		int N = data.getUserN();		
 		Vector P;
 		Matrix MR;
 		Matrix MT;
+		
+		System.out.println("Функція F3 - математичний вираз: O = SORT(P)*(MR*MT)");
 		try {
-			P = data.createVector("P", N);
-			MR = data.createMatrix("MR", N);
-			MT = data.createMatrix("MT", N);
+			data.setUserInputType();
 		} catch (IOException ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при зчитувані файлу: " + ex.getMessage());
+			System.out.println("Потік Т3 - неможливо продовжити виконання! Помилка при читанні файлу: " + ex.getMessage());
 			return;
 		} catch (Exception ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
+			data.closeInput();
+			return;
+		}
+
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException ex) {
+			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
+			return;
+		}
+
+		try {
+			P = data.createVector("P");
+			MR = data.createMatrix("MR");
+			MT = data.createMatrix("MT");
+		} catch (Exception ex) {
+			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		} finally {
 			data.closeInput();
 		}
+
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException ex) {
+			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
+			return;
+		}
+
 		Vector O = P.sort().getMatrixMultiplyProduct(MR.getMatrixMultiplyProduct(MT));
-						
+
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException ex) {
+			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
+			return;
+		}
+		Thread.yield();
+
 		System.out.println("Функція F3 - результуючий вектор:");
 		System.out.println(O.toString());
-	}
+		System.out.println("Виконання потоку T3 завершено...");
 
+	}
 }
