@@ -21,32 +21,31 @@ import lab0.Data.Matrix;
 
 public class T3 extends Thread {
 
-	private int maxSmallN;
 	private Semaphore inOutSemaphore;
-	
-	public T3(Semaphore inOutSemaphore, int maxSmallN) {
+
+	public T3(Semaphore inOutSemaphore) {
 		this.inOutSemaphore = inOutSemaphore;
-		this.maxSmallN = maxSmallN;
 	}
-	
+
 	@Override
 	public void run() {
-		Data data = new Data("F3", maxSmallN);
-		int N;
+		Data data = new Data("F3");
 		Vector P;
 		Matrix MR;
 		Matrix MT;
-		
+
 		try {
 			inOutSemaphore.acquire();
 		} catch (InterruptedException ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		
-		System.out.println("Функція F3 - математичний вираз: O = SORT(P)*(MR*MT)");
+		System.out.println("Функція F3 - математичний вираз: O = SORT(P) * (MR * MT)");
 		try {
-			N = data.setUserInputType();
+			data.setUserInputType();
+			P = data.createVector("P");
+			MR = data.createMatrix("MR");
+			MT = data.createMatrix("MT");
 		} catch (IOException ex) {
 			System.out.println("Потік Т3 - неможливо продовжити виконання! Помилка при читанні файлу: " + ex.getMessage());
 			return;
@@ -54,44 +53,19 @@ public class T3 extends Thread {
 			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-
 		inOutSemaphore.release();
 		
-		if (N <= maxSmallN) {
-			try {
-				inOutSemaphore.acquire();
-			} catch (InterruptedException ex) {
-				System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
-				return;
-			}
-		}
-
-		try {
-			P = data.createVector("P");
-			MR = data.createMatrix("MR");
-			MT = data.createMatrix("MT");
-		} catch (Exception ex) {
-			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
-			return;
-		}
-		
-		if (!inOutSemaphore.tryAcquire()) {
-			inOutSemaphore.release();
-		}
-
 		Vector O = P.sort().getMatrixMultiplyProduct(MR.getMatrixMultiplyProduct(MT));
-
+		
 		try {
 			inOutSemaphore.acquire();
 		} catch (InterruptedException ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+			System.out.println("Потік Т3 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		
 		System.out.println("Функція F3 - результуючий вектор:");
 		System.out.println(O.toString());
 		System.out.println("Виконання потоку T3 завершено...\n");
-
 		inOutSemaphore.release();
 	}
 }

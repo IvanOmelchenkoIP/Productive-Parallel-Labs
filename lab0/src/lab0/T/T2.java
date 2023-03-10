@@ -20,77 +20,52 @@ import lab0.Data.Matrix;
 
 public class T2 extends Thread {
 
-	private int maxSmallN;
 	private Semaphore inOutSemaphore;
-	
-	public T2(Semaphore inOutSemaphore, int maxSmallN) {
+
+	public T2(Semaphore inOutSemaphore) {
 		this.inOutSemaphore = inOutSemaphore;
-		this.maxSmallN = maxSmallN;
 	}
-	
+
 	@Override
 	public void run() {
-		Data data = new Data("F2", maxSmallN);
-		int N;
+		Data data = new Data("F2");
 		Matrix MH;
 		Matrix MK;
 		Matrix ML;
-		
+
 		try {
 			inOutSemaphore.acquire();
 		} catch (InterruptedException ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
-			return;
-		}
-
-		System.out.println("Функція F2 - математичний вираз: q = MAX(MH * MK - ML)");
-		try {
-			N = data.setUserInputType();
-		} catch (IOException ex) {
-			System.out.println("Потік Т2 - неможливо продовжити виконання! Помилка при читанні файлу: " + ex.getMessage());
-			return;
-		} catch (Exception ex) {
 			System.out.println("Потік Т2 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		
-		inOutSemaphore.release();
-
-		if (N <= maxSmallN) {
-			try {
-				inOutSemaphore.acquire();
-			} catch (InterruptedException ex) {
-				System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
-				return;
-			}
-		}
-		
+		System.out.println("Функція F2 - математичний вираз: q = MAX(MH * MK - ML)");
 		try {
+			data.setUserInputType();
 			MH = data.createMatrix("MH");
 			MK = data.createMatrix("MK");
 			ML = data.createMatrix("ML");
+		} catch (IOException ex) {
+			System.out.println(
+					"Потік Т2 - неможливо продовжити виконання! Помилка при читанні файлу: " + ex.getMessage());
+			return;
 		} catch (Exception ex) {
 			System.out.println("Потік Т2 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
+		inOutSemaphore.release();
 		
-		if (!inOutSemaphore.tryAcquire()) {
-			inOutSemaphore.release();
-		}
-
 		int q = MH.getMatrixMultiplyProduct(MK).getMatrixDifference(ML).max();
-
+		
 		try {
 			inOutSemaphore.acquire();
 		} catch (InterruptedException ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+			System.out.println("Потік Т2 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		
 		System.out.println("Функція F2 - результуюче число:");
 		System.out.println(q + "\n");
 		System.out.println("Виконання потоку T2 завершено...\n");
-		
 		inOutSemaphore.release();
 	}
 }

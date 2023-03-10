@@ -19,12 +19,10 @@ import lab0.T.*;
 public class Lab0 {
 
 	public static void main(String[] args) {
-		final int MAX_SMALL_N = 4;
-
 		Semaphore inOutSemaphore = new Semaphore(1);
-		Thread t1 = new T1(inOutSemaphore, MAX_SMALL_N);
-		Thread t2 = new T2(inOutSemaphore, MAX_SMALL_N);
-		Thread t3 = new T3(inOutSemaphore, MAX_SMALL_N);
+		Thread t1 = new T1(inOutSemaphore);
+		Thread t2 = new T2(inOutSemaphore);
+		Thread t3 = new T3(inOutSemaphore);
 		
 		t1.start();
 		t2.start();

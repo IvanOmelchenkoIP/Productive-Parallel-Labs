@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Data {
 	
-	private int maxSmallN;
+	private final static int MAX_SMALL_N = 4;
 	
 	private String fnName;
 	private MatrixData md;
@@ -35,29 +35,27 @@ public class Data {
 	private int fillNumber;
 	private int dataGeneration;
 	
-	public Data(String fnName, int maxSmallN) {
+	public Data(String fnName) {
 		this.fnName = fnName;
-		this.maxSmallN = maxSmallN;
 		this.md = new MatrixData();
 		this.vd = new VectorData();
 		this.fr = new FileReader();
 		this.ui = new UserInputScanner();
 	}
 	
-	public int setUserInputType() throws IOException, Exception {
+	public void setUserInputType() throws IOException, Exception {
 		N = ui.getUserN(fnName);
-		if (N <= maxSmallN) {
+		if (N <= MAX_SMALL_N) {
 			dataGeneration = DataGenerationTypes.USER_INPUT;
-			return N;
+			return;
 		}
 		dataGeneration = ui.scanDataGenerationType();
 		switch(dataGeneration) {
 		case DataGenerationTypes.READ_FILE -> { fileContents = fr.read(ui.scanFilename()); }
-		case DataGenerationTypes.GENERATE_RANDOM -> { break; }
+		case DataGenerationTypes.GENERATE_RANDOM -> { return; }
 		case DataGenerationTypes.FILL_WITH_NUMBER -> { fillNumber = ui.scanFillNumber(); }
 		default -> { throw new Exception("Невірний вибір при виборі методу заповнення матриці!"); }	
 		}
-		return N;
 	}
 	
 	public Matrix createMatrix(String name) throws Exception {
@@ -189,7 +187,7 @@ class UserInputScanner {
 	}
 	
 	int scanDataGenerationType() {
-		System.out.print("Виберіть спосіб вводу даних:\n1 - зчитати матрицю з файлу\n2 - згенерувати випадкову матрицю\n3 - заповнити матрицю числом\n> ");
+		System.out.print("Виберіть спосіб вводу даних:\n1 - зчитати з файлу\n2 - згенерувати випадково\n3 - заповнити числом\n> ");
 		return scanNumber();
 	}
 	

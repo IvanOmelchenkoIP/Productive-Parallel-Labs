@@ -21,34 +21,35 @@ import lab0.Data.Matrix;
 
 public class T1 extends Thread {
 
-	private int maxSmallN;
 	private Semaphore inOutSemaphore;
-	
-	public T1(Semaphore inOutSemaphore, int maxSmallN) {
+
+	public T1(Semaphore inOutSemaphore) {
 		this.inOutSemaphore = inOutSemaphore;
-		this.maxSmallN = maxSmallN;
 	}
-	
+
 	@Override
 	public void run() {
-		Data data = new Data("F1", maxSmallN);
-		int N;
+		Data data = new Data("F1");
 		Vector A;
 		Vector B;
 		Vector C;
 		Matrix MA;
 		Matrix MB;
-		
+
 		try {
 			inOutSemaphore.acquire();
 		} catch (InterruptedException ex) {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-
 		System.out.println("Функція F1 - математичний вираз: D = (SORT(A + B) + C) * (MA * MB)");
 		try {
-			N = data.setUserInputType();
+			data.setUserInputType();
+			A = data.createVector("A");
+			B = data.createVector("B");
+			C = data.createVector("C");
+			MA = data.createMatrix("MA");
+			MB = data.createMatrix("MB");
 		} catch (IOException ex) {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при читанні файлу: " + ex.getMessage());
 			return;
@@ -56,33 +57,8 @@ public class T1 extends Thread {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-
 		inOutSemaphore.release();
-
-		if (N <= maxSmallN) {
-			try {
-				inOutSemaphore.acquire();
-			} catch (InterruptedException ex) {
-				System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
-				return;
-			}
-		}
 		
-		try {
-			A = data.createVector("A");
-			B = data.createVector("B");
-			C = data.createVector("C");
-			MA = data.createMatrix("MA");
-			MB = data.createMatrix("MB");
-		} catch (Exception ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
-			return;
-		}
-
-		if (!inOutSemaphore.tryAcquire()) {
-			inOutSemaphore.release();
-		}
-
 		Vector D = A.getVectorSum(B).sort().getVectorSum(C).getMatrixMultiplyProduct(MA.getMatrixMultiplyProduct(MB));
 
 		try {
@@ -91,11 +67,9 @@ public class T1 extends Thread {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		
 		System.out.println("Функція F1 - результуючий вектор:");
 		System.out.println(D.toString());
 		System.out.println("Виконання потоку T1 завершено...\n");
-		
 		inOutSemaphore.release();
 	}
 }
