@@ -20,12 +20,6 @@ import lab0.Data.Matrix;
 
 public class T2 extends Thread {
 
-	private Semaphore inOutSemaphore;
-
-	public T2(Semaphore inOutSemaphore) {
-		this.inOutSemaphore = inOutSemaphore;
-	}
-
 	@Override
 	public void run() {
 		Data data = new Data("F2");
@@ -33,12 +27,6 @@ public class T2 extends Thread {
 		Matrix MK;
 		Matrix ML;
 
-		try {
-			inOutSemaphore.acquire();
-		} catch (InterruptedException ex) {
-			System.out.println("Потік Т2 - неможливо продовжити виконання! " + ex.getMessage());
-			return;
-		}
 		System.out.println("Функція F2 - математичний вираз: q = MAX(MH * MK - ML)");
 		try {
 			data.setUserInputType();
@@ -53,19 +41,25 @@ public class T2 extends Thread {
 			System.out.println("Потік Т2 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		inOutSemaphore.release();
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException ex) {
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+			return;
+		}
 		
 		int q = MH.getMatrixMultiplyProduct(MK).getMatrixDifference(ML).max();
 		
 		try {
-			inOutSemaphore.acquire();
+			Thread.sleep(500);
 		} catch (InterruptedException ex) {
-			System.out.println("Потік Т2 - неможливо продовжити виконання! " + ex.getMessage());
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
+
 		System.out.println("Функція F2 - результуюче число:");
 		System.out.println(q + "\n");
 		System.out.println("Виконання потоку T2 завершено...\n");
-		inOutSemaphore.release();
 	}
 }

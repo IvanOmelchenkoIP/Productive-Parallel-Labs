@@ -165,7 +165,7 @@ class UserInputScanner {
 	}
 	
 	int[][] getMatrixFromInput(String fnName, String name, int N) {
-		System.out.println("Функція " + fnName + ". Ввід матриці" + name + ": ");
+		System.out.println("Функція " + fnName + ". Ввід матриці " + name + ": ");
 		int[][] MA = new int[N][N];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
