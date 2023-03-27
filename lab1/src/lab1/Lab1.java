@@ -2,6 +2,8 @@
 
 package lab1;
 
+import lab1.Data.CommonData;
+import lab1.Data.Data;
 import lab1.T.T1;
 import lab1.T.T2;
 import lab1.T.T3;
@@ -23,10 +25,13 @@ public class Lab1 {
 		
 		final int H = N / P;
 		
-		Thread t1 = new T1(N, P);
-		Thread t2 = new T2(N, P);
-		Thread t3 = new T3(N, P);
-		Thread t4 = new T4(N, P);
+		CommonData cd = new CommonData();
+		Data data = new Data();
+		
+		Thread t1 = new T1(N, H, cd, data);
+		Thread t2 = new T2(N, H, cd, data);
+		Thread t3 = new T3(N, H, cd, data);
+		Thread t4 = new T4(N, H, cd, data);
 		
 		t1.start();
 		t2.start();

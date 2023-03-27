@@ -44,7 +44,7 @@ public class CommonData {
 		return MM;
 	}
 	
-	public void setMR(Matrix value) {
+	public void setMB(Matrix value) {
 		MB = value;
 	}
 	

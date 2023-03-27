@@ -1,23 +1,29 @@
 package lab1.T;
 
+import lab1.Data.CommonData;
+import lab1.Data.Data;
 import lab1.Data.Matrix;
 
 public class T2 extends Thread {
 
 	private final int N;
-	private final int P;
+	private final int H;
 	
-	public T2(int N, int P) {
+	private final CommonData cd;
+	private final Data data;
+	
+	public T2(int N, int H, CommonData cd, Data data) {
 		this.N = N;
-		this.P = P;
+		this.H = H;
+		this.cd = cd;
+		this.data = data;
 	}
+	
 	
 	@Override
 	public void run() {
-		Matrix MR;
-		
-		int MIN_H = N / P - 1;
-		int MAX_H = (N / P) * 2 - 1;
+		int MIN_H = H - 1;
+		int MAX_H = H * 2 - 1;
 		
 		System.out.println("Результат виконання обчислень. MR = ");
 		
