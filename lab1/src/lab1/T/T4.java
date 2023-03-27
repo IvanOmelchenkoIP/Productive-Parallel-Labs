@@ -2,8 +2,8 @@ package lab1.T;
 
 import lab1.Data.CommonData;
 import lab1.Data.Data;
-import lab1.Data.Matrix;
-import lab1.Data.Vector;
+import lab1.Data.matrix.Matrix;
+import lab1.Data.vector.Vector;
 
 public class T4 extends Thread {
 

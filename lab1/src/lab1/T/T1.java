@@ -2,7 +2,7 @@ package lab1.T;
 
 import lab1.Data.CommonData;
 import lab1.Data.Data;
-import lab1.Data.Matrix;
+import lab1.Data.matrix.Matrix;
 
 public class T1 extends Thread {
 

@@ -1,6 +1,6 @@
-package lab1.Data;
+package lab1.Data.matrix;
 
-import lab1.Data.Matrix;
+import lab1.Data.matrix.Matrix;
 
 public class Matrix {
 
@@ -80,13 +80,24 @@ public class Matrix {
 	}
 	
 	public Matrix getNumberProduct(int a) {
-		int[][] dataB = new int[N][M];
+		int[][] dataMB = new int[N][M];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				dataB[i][j] = data[i][j] * a;
+				dataMB[i][j] = data[i][j] * a;
 			}
 		}
-		return new Matrix(dataB);
+		return new Matrix(dataMB);
+	}
+	
+	public Matrix getMatrixSum(Matrix MB) {
+		int[][] dataMB = MB.getData();
+		int[][] dataMC = new int[N][M];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				dataMC[i][j] = data[i][j] + dataMB[i][j];
+			}
+		}
+		return new Matrix(dataMC);
 	}
 	
 	public void insertIntoIndexes(int start, int end, Matrix MB) {

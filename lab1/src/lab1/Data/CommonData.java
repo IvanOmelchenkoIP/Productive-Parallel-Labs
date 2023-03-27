@@ -1,5 +1,8 @@
 package lab1.Data;
 
+import lab1.Data.matrix.Matrix;
+import lab1.Data.vector.Vector;
+
 public class CommonData {
 
 	int d;
