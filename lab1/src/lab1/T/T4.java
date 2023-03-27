@@ -23,12 +23,20 @@ public class T4 extends Thread {
 	
 	@Override
 	public void run() {
-		Vector Z = data.newVector();
-		cd.setZ(Z);
-		int d = data.newNumber();
-		cd.setD(d);
-		Matrix MM = data.newMatrix();
-		cd.setMM(MM);
+		int d;
+		Vector Z;
+		Matrix MM;
+		try {
+			Z = data.createVector("Z");
+			cd.setZ(Z);
+			d = data.createNumber("d");
+			cd.setD(d);
+			MM = data.createMatrix("MM");
+			cd.setMM(MM);
+		} catch (Exception ex) {
+			System.out.println("Неможливо продовжити виконання - " + ex);
+			return;
+		}
 		
 		int MIN_H = H * 3 - 1;
 		int MAX_H = N - 1;

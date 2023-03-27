@@ -11,7 +11,7 @@ public class UserInputScanner {
 	}
 	
 	public int getUserN() {
-		System.out.print("Введіть розмірність векторів та матриць: ");
+		System.out.print("Введіть розмірність векторів та матриць N (N > 4): ");
 		return scanner.nextInt();
 	}
 	

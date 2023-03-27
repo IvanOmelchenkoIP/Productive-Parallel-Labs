@@ -21,9 +21,14 @@ public class T1 extends Thread {
 	
 	@Override
 	public void run() {
-		Matrix MB = data.newMatrix();
-		cd.setMB(MB);
-		
+		Matrix MB;
+		try {
+			MB = data.createMatrix("MB");
+			cd.setMM(MB);
+		} catch (Exception ex) {
+			System.out.println("Неможливо продовжити виконання - " + ex);
+			return;
+		}
 		int MIN_H = 0;
 		int MAX_H = H - 1;
 		

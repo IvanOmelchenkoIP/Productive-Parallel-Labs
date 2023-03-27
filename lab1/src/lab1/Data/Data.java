@@ -14,7 +14,8 @@ class DataGenerationTypes {
 
 public class Data {
 	
-	private final static int MAX_SMALL_N = 4;
+	final int MIN_N = 4;
+	private final static int MAX_SMALL_N = 8;
 	
 	private UserInputScanner ui;
 	private MatrixData md;
@@ -35,8 +36,16 @@ public class Data {
 		this.fr = new FileReader();
 	}
 	
-	public void setUserInputType() throws IOException, Exception {
+	public int setUserN() throws IOException, Exception {
 		N = ui.getUserN();
+		if (N <= MIN_N) {
+			throw new Exception("Неможливо продовжити виконання програми - невірне значення N!");
+		}
+		setUserInputType();
+		return N;
+	}
+	
+	public void setUserInputType() throws IOException, Exception {
 		if (N <= MAX_SMALL_N) {
 			dataGeneration = DataGenerationTypes.USER_INPUT;
 			return;

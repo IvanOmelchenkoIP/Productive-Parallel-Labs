@@ -22,9 +22,14 @@ public class T3 extends Thread {
 	
 	@Override
 	public void run() {
-		Matrix MC = data.newMatrix();
-		cd.setMC(MC);
-		
+		Matrix MC;
+		try {
+			MC = data.createMatrix("MC");
+			cd.setMM(MC);
+		} catch (Exception ex) {
+			System.out.println("Неможливо продовжити виконання - " + ex);
+			return;
+		}
 		int MIN_H = H * 2 - 1;
 		int MAX_H = H * 3 - 1;
 		
