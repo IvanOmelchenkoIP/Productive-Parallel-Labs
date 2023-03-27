@@ -21,6 +21,12 @@ import lab0.Data.Matrix;
 
 public class T1 extends Thread {
 
+	private Semaphore inOutSemaphore;
+
+	public T1(Semaphore inOutSemaphore) {
+		this.inOutSemaphore = inOutSemaphore;
+	}
+
 	@Override
 	public void run() {
 		Data data = new Data("F1");
@@ -30,6 +36,12 @@ public class T1 extends Thread {
 		Matrix MA;
 		Matrix MB;
 
+		try {
+			inOutSemaphore.acquire();
+		} catch (InterruptedException ex) {
+			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
+			return;
+		}
 		System.out.println("Функція F1 - математичний вираз: D = (SORT(A + B) + C) * (MA * MB)");
 		try {
 			data.setUserInputType();
@@ -39,31 +51,27 @@ public class T1 extends Thread {
 			MA = data.createMatrix("MA");
 			MB = data.createMatrix("MB");
 		} catch (IOException ex) {
+			ex.printStackTrace();
+
 			System.out.println("Потік Т1 - неможливо продовжити виконання! Помилка при читанні файлу: " + ex.getMessage());
 			return;
 		} catch (Exception ex) {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-		
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException ex) {
-			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
-			return;
-		}
+		inOutSemaphore.release();
 		
 		Vector D = A.getVectorSum(B).sort().getVectorSum(C).getMatrixMultiplyProduct(MA.getMatrixMultiplyProduct(MB));
 
 		try {
-			Thread.sleep(500);
+			inOutSemaphore.acquire();
 		} catch (InterruptedException ex) {
 			System.out.println("Потік Т1 - неможливо продовжити виконання! " + ex.getMessage());
 			return;
 		}
-
 		System.out.println("Функція F1 - результуючий вектор:");
 		System.out.println(D.toString());
 		System.out.println("Виконання потоку T1 завершено...\n");
+		inOutSemaphore.release();
 	}
 }

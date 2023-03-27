@@ -51,7 +51,7 @@ public class Data {
 		}
 		dataGeneration = ui.scanDataGenerationType();
 		switch(dataGeneration) {
-		case DataGenerationTypes.READ_FILE -> { fileContents = fr.read(ui.scanFilename()); }
+		case DataGenerationTypes.READ_FILE -> { String filename = ui.scanFilename(); fileContents = fr.read(filename);}
 		case DataGenerationTypes.GENERATE_RANDOM -> { return; }
 		case DataGenerationTypes.FILL_WITH_NUMBER -> { fillNumber = ui.scanFillNumber(); }
 		default -> { throw new Exception("Невірний вибір при виборі методу заповнення матриці!"); }	
@@ -202,7 +202,9 @@ class UserInputScanner {
 	}
 	
 	private int scanNumber() {
-		return scanner.nextInt();
+		int num = scanner.nextInt();
+		scanner.nextLine();
+		return num;
 	}
 	
 	private String scanLine() {

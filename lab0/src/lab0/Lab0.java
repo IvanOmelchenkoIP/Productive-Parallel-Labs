@@ -12,19 +12,22 @@
 
 package lab0;
 
+import java.util.concurrent.Semaphore;
+
 import lab0.T.*;
 
 public class Lab0 {
 
 	public static void main(String[] args) {
-		Thread t1 = new T1();
-		Thread t2 = new T2();
-		Thread t3 = new T3();
+		Semaphore inOutSemaphore = new Semaphore(1);
+		Thread t1 = new T1(inOutSemaphore);
+		Thread t2 = new T2(inOutSemaphore);
+		Thread t3 = new T3(inOutSemaphore);
 		
 		t1.start();
 		t2.start();
 		t3.start();
-		
+
 		try {
 			t1.join();
 		} catch (InterruptedException ex) {
