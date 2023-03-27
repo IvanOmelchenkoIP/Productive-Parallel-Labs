@@ -1,10 +1,16 @@
 package lab1.T;
 
-public class T3 implements Runnable {
+public class T3 extends Thread {
 
+	private final int P;
+	
+	public T3(int P) {
+		this.P = P;
+	}
+	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		System.out.println("T3");
 		
 	}
 
