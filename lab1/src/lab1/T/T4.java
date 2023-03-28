@@ -2,6 +2,7 @@ package lab1.T;
 
 import lab1.Data.CommonData;
 import lab1.Data.Data;
+import lab1.Data.SyncData;
 import lab1.Data.matrix.Matrix;
 import lab1.Data.vector.Vector;
 
@@ -12,17 +13,28 @@ public class T4 extends Thread {
 
 	private final CommonData cd;
 	private final Data data;
+	private final SyncData syncData;
 
-	public T4(int N, int H, CommonData cd, Data data) {
+	public T4(int N, int H, CommonData cd, Data data, SyncData syncData) {
 		this.N = N;
 		this.H = H;
 		this.cd = cd;
 		this.data = data;
+		this.syncData = syncData;
 	}
 
 	@Override
 	public void run() {
-		int d;
+		
+		syncData.getT4Input().release(3);
+		
+		try {
+			syncData.getT1Input().acquire(1);
+			syncData.getT3Input().acquire(1);
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		}
+		/*int d;
 		Vector Z;
 		Matrix MM;
 		try {
@@ -54,7 +66,7 @@ public class T4 extends Thread {
 				.getMatrixProduct(cd.retrieveMC().getMatrixProduct(cd.retrieveMM().getPartialMatrix(MIN_H, MAX_H)))
 				.getNumberProduct(cd.retrieveD())
 				.getMatrixSum(cd.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(cd.retrieveQ())));
-		// -------------W
+		// -------------W*/
 
 		System.out.println("T4");
 	}

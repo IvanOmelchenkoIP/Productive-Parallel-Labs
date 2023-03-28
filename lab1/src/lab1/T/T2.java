@@ -2,6 +2,7 @@ package lab1.T;
 
 import lab1.Data.CommonData;
 import lab1.Data.Data;
+import lab1.Data.SyncData;
 import lab1.Data.matrix.Matrix;
 
 public class T2 extends Thread {
@@ -11,17 +12,27 @@ public class T2 extends Thread {
 
 	private final CommonData cd;
 	private final Data data;
+	private final SyncData syncData;
 
-	public T2(int N, int H, CommonData cd, Data data) {
+	public T2(int N, int H, CommonData cd, Data data, SyncData syncData) {
 		this.N = N;
 		this.H = H;
 		this.cd = cd;
 		this.data = data;
+		this.syncData = syncData;
 	}
 
 	@Override
 	public void run() {
-		int MIN_H = H - 1;
+				
+		try {
+			syncData.getT1Input().acquire(1);
+			syncData.getT3Input().acquire(1);
+			syncData.getT4Input().acquire(1);
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		}
+		/*int MIN_H = H - 1;
 		int MAX_H = H * 2 - 1;
 
 		// -------------
@@ -40,7 +51,7 @@ public class T2 extends Thread {
 				.getMatrixSum(cd.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(cd.retrieveQ())));
 		// -------------W
 
-		System.out.println("Результат виконання обчислень. MR = " + MR.toString());
-
+		System.out.println("Результат виконання обчислень. MR = " + MR.toString());*/
+		System.out.println("T2");
 	}
 }
