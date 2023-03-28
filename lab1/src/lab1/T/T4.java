@@ -26,11 +26,11 @@ public class T4 extends Thread {
 	@Override
 	public void run() {
 		
-		syncData.getT4Input().release(3);
+		syncData.getT4Input().release(syncData.getWaitingForInput());
 		
 		try {
-			syncData.getT1Input().acquire(1);
-			syncData.getT3Input().acquire(1);
+			syncData.getT1Input().acquire();
+			syncData.getT3Input().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 		}
@@ -67,7 +67,22 @@ public class T4 extends Thread {
 				.getNumberProduct(cd.retrieveD())
 				.getMatrixSum(cd.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(cd.retrieveQ())));
 		// -------------W*/
-
+		synchronized(syncData.getInputSync()) {
+			
+		}
+		
+		syncData.getQLock().lock();
+		syncData.getQLock().unlock();
+		
+		try {
+			syncData.getMRinit().acquire();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		} finally {
+			syncData.getMRinit().release();
+		}
+		syncData.getT4Finish().release();
+		
 		System.out.println("T4");
 	}
 }

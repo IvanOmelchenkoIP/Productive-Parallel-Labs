@@ -25,11 +25,11 @@ public class T3 extends Thread {
 	@Override
 	public void run() {
 		
-		syncData.getT3Input().release(3);
+		syncData.getT3Input().release(syncData.getWaitingForInput());
 		
 		try {
-			syncData.getT1Input().acquire(1);
-			syncData.getT4Input().acquire(1);
+			syncData.getT1Input().acquire();
+			syncData.getT4Input().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 		}
@@ -60,7 +60,22 @@ public class T3 extends Thread {
 				.getNumberProduct(cd.retrieveD())
 				.getMatrixSum(cd.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(cd.retrieveQ())));
 		// -------------W*/
-
+		synchronized(syncData.getInputSync()) {
+			
+		}
+		
+		syncData.getQLock().lock();
+		syncData.getQLock().unlock();
+		
+		try {
+			syncData.getMRinit().acquire();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		} finally {
+			syncData.getMRinit().release();
+		}
+		syncData.getT3Finish().release();
+		
 		System.out.println("T3");
 	}
 }

@@ -26,12 +26,22 @@ public class T2 extends Thread {
 	public void run() {
 				
 		try {
-			syncData.getT1Input().acquire(1);
-			syncData.getT3Input().acquire(1);
-			syncData.getT4Input().acquire(1);
+			syncData.getT1Input().acquire();
+			syncData.getT3Input().acquire();
+			syncData.getT4Input().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 		}
+		
+		
+		try {
+			syncData.getT1Finish().acquire();
+			syncData.getT3Finish().acquire();
+			syncData.getT4Finish().acquire();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		}
+		
 		/*int MIN_H = H - 1;
 		int MAX_H = H * 2 - 1;
 
@@ -52,6 +62,21 @@ public class T2 extends Thread {
 		// -------------W
 
 		System.out.println("Результат виконання обчислень. MR = " + MR.toString());*/
+		
+		synchronized(syncData.getInputSync()) {
+			
+		}
+		
+		syncData.getQLock().lock();
+		syncData.getQLock().unlock();
+		
+		try {
+			syncData.getMRinit().acquire();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		} finally {
+			syncData.getMRinit().release();
+		}
 		System.out.println("T2");
 	}
 }
