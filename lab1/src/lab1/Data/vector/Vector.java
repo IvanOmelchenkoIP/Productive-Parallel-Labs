@@ -24,13 +24,12 @@ public class Vector {
 	}
 	
 	public Vector getPartialVector(int start, int end) {
-		int[] dataB = new int[end - start];
+		int[] dataB = new int[end - start + 1];
 		int ind = 0;
 		for (int i = start; i <= end; i++) {
-			dataB[ind] = data[i];
-			ind += 1;
+			dataB[ind++] = data[i];
 		}
-		return new Vector(data);
+		return new Vector(dataB);
 	}
 	
 	public int min() {
