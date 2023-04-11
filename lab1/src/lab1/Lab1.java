@@ -16,11 +16,11 @@ import lab1.T.T4;
 public class Lab1 {
 
 	public static void main(String[] args) {
-		final int P = 4;
+		final int P = 4;		
+		int N;
 		
 		Data data = new Data();
-		
-		int N;
+
 		try {
 			N = data.setUserN();
 		} catch (IOException ex) {
@@ -31,7 +31,10 @@ public class Lab1 {
 			return;
 		};
 		
+		data.init();
+		
 		final int H = N / P;
+		System.out.println(H);
 		
 		Thread t1 = new T1(N, H, data);
 		Thread t2 = new T2(N, H, data);

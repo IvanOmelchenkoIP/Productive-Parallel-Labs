@@ -56,13 +56,11 @@ public class Matrix {
 	}
 	
 	public Matrix getPartialMatrix(int start, int end) {
-		int[][] dataB = new int[end - start][M];
-		int ind = 0;
-		for (int i = start; i <= end; i++) {
-			for (int j = 0; j < M; j++) {
-				dataB[ind][j] = data[i][j];
+		int[][] dataB = new int[N][end - start + 1];
+		for (int i = 0; i < N; i++) {
+			for (int j = start, k = 0; j <= end; j++, k++) {
+				dataB[i][k] = data[i][j];
 			}
-			ind += 1;
 		}
 		return new Matrix(dataB);
 	}
@@ -102,12 +100,10 @@ public class Matrix {
 	
 	public void insertIntoIndexes(int start, int end, Matrix MB) {
 		int[][] dataB = MB.getData();
-		int ind = 0;
-		for (int i = start; i <= end; i++) {
-			for (int j = 0; j <= M; j++) {
-				data[i][j] = dataB[ind][j];
+		for (int i = 0; i < N; i++) {
+			for (int j = start, k = 0; j <= end; j++, k++) {
+				data[i][j] = dataB[i][k];
 			}
-			ind += 1;
 		}
 	}
 }

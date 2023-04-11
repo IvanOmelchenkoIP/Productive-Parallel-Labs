@@ -52,35 +52,33 @@ public class T4 extends Thread {
 		int MAX_H = N - 1;
 
 		int q4 = data.getVectorZ().getPartialVector(MIN_H, MAX_H).min();
-		System.out.println("q4 = " + q4);
 		data.getQLock().lock();
 		int q = data.getValQ();
 		data.setValQ(q > q4 ? q4 : q);
-		System.out.println("q = " + data.getValQ());
 		data.getQLock().unlock();
-		/*Matrix MR = commonData.retrieveMR();
-		if (MR == null) {
-			MR = Matrix.cleanMarix(N);
-			commonData.setMR(MR);
-		}
-		MR.insertIntoIndexes(MIN_H, MAX_H, commonData.retrieveMB()
-				.getMatrixProduct(commonData.retrieveMC().getMatrixProduct(commonData.retrieveMM().getPartialMatrix(MIN_H, MAX_H)))
-				.getNumberProduct(commonData.retrieveD())
-				.getMatrixSum(commonData.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(commonData.retrieveQ())));
-
 		
-		syncData.getQLock().lock();
-		syncData.getQLock().unlock();
+		data.getQT4Semaphore().release(data.getRestThreadsAmount());
 		
 		try {
-			syncData.getMRinit().acquire();
+			data.getQT1Semaphore().acquire();
+			data.getQT2Semaphore().acquire();
+			data.getQT3Semaphore().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
-		} finally {
-			syncData.getMRinit().release();
+			return;
 		}
-		syncData.getT4Finish().release();
-		
-		System.out.println("T4");*/
+		System.out.println("q = " + data.getValQ());
+		System.out.println("T4 " + MIN_H + " " + MAX_H + "|" + (MAX_H - MIN_H + 1));
+		System.out.println("T4\n" + data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).toString());
+
+		Matrix MR = data.getMatrixMR();
+		MR.insertIntoIndexes(MIN_H, MAX_H,
+				data.getMatrixMB()
+						.getMatrixProduct(
+								data.getMatrixMC().getMatrixProduct(data.getMatrixMM().getPartialMatrix(MIN_H, MAX_H)))
+						.getNumberProduct(data.getValD()).getMatrixSum(
+								data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(data.getValQ())));
+	
+		data.getT4FinishSemaphore().release();
 	}
 }

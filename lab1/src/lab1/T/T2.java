@@ -16,7 +16,7 @@ public class T2 extends Thread {
 	}
 
 	@Override
-	public void run() {		
+	public void run() {
 		try {
 			data.getT1InputSemaphore().acquire();
 			data.getT3InputSemaphore().acquire();
@@ -25,46 +25,45 @@ public class T2 extends Thread {
 			System.out.println(ex);
 			return;
 		}
-		
+
 		int MIN_H = H;
 		int MAX_H = H * 2 - 1;
 
 		int q2 = data.getVectorZ().getPartialVector(MIN_H, MAX_H).min();
-		System.out.println("q2 = " + q2);
 		data.getQLock().lock();
 		int q = data.getValQ();
 		data.setValQ(q > q2 ? q2 : q);
-		System.out.println("q = " + data.getValQ());
 		data.getQLock().unlock();
 
-		/*Matrix MR;
-		try {
-			syncData.getMRinit().acquire();
-			MR = commonData.retrieveMR();
-			if (MR == null) {
-				MR = Matrix.cleanMarix(N);
-				commonData.setMR(MR);
-			}
-		} catch (InterruptedException ex) {
-			System.out.println(ex);
-			return;
-		} finally {
-			syncData.getMRinit().release();
-		}
-		MR.insertIntoIndexes(MIN_H, MAX_H, commonData.retrieveMB()
-				.getMatrixProduct(commonData.retrieveMC().getMatrixProduct(commonData.retrieveMM().getPartialMatrix(MIN_H, MAX_H)))
-				.getNumberProduct(commonData.retrieveD())
-				.getMatrixSum(commonData.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(commonData.retrieveQ())));
+		data.getQT2Semaphore().release(data.getRestThreadsAmount());
 
 		try {
-			syncData.getT1Finish().acquire();
-			syncData.getT3Finish().acquire();
-			syncData.getT4Finish().acquire();
+			data.getQT1Semaphore().acquire();
+			data.getQT3Semaphore().acquire();
+			data.getQT4Semaphore().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 			return;
 		}
-		
-		System.out.println("Результат виконання обчислень. MR = " + MR.toString());		*/
+		System.out.println("q = " + data.getValQ());
+
+		System.out.println("T2 " + MIN_H + " " + MAX_H + "|" + (MAX_H - MIN_H + 1));
+		System.out.println("T2\n" + data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).toString());
+		Matrix MR = data.getMatrixMR();
+		MR.insertIntoIndexes(MIN_H, MAX_H,
+				data.getMatrixMB()
+						.getMatrixProduct(
+								data.getMatrixMC().getMatrixProduct(data.getMatrixMM().getPartialMatrix(MIN_H, MAX_H)))
+						.getNumberProduct(data.getValD()).getMatrixSum(
+								data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(data.getValQ())));
+
+		try {
+			data.getT1FinishSemaphore().acquire();
+			data.getT3FinishSemaphore().acquire();
+			data.getT4FinishSemaphore().acquire();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		}
+		System.out.println("Результат виконання обчислень. MR = \n" + MR.toString());
 	}
 }

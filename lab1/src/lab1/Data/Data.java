@@ -117,6 +117,10 @@ public class Data {
 		}
 	}
 
+	public void init() {
+		commonData.init(N);
+	}
+	
 	public int createNumber(String name) throws Exception {
 		switch (dataGeneration) {
 		case DataGenerationTypes.USER_INPUT -> {
@@ -159,6 +163,22 @@ public class Data {
 		return parallelData.getQLock();
 	}
 
+	public Semaphore getQT1Semaphore() {
+		return parallelData.getQT1Semaphore();
+	}
+	
+	public Semaphore getQT2Semaphore() {
+		return parallelData.getQT2Semaphore();
+	}
+	
+	public Semaphore getQT3Semaphore() {
+		return parallelData.getQT3Semaphore();
+	}
+	
+	public Semaphore getQT4Semaphore() {
+		return parallelData.getQT4Semaphore();
+	}
+	
 	public Semaphore getT1FinishSemaphore() {
 		return parallelData.getT1FinishSemaphore();
 	}
@@ -247,6 +267,11 @@ class ParallelData {
 	private Lock qLock;
 
 	private Semaphore MRInitSemaphore;
+	
+	private Semaphore qT1Semaphore;
+	private Semaphore qT2Semaphore;
+	private Semaphore qT3Semaphore;
+	private Semaphore qT4Semaphore;
 
 	private Semaphore T1FinishSemaphore;
 	private Semaphore T3FinishSemaphore;
@@ -260,8 +285,13 @@ class ParallelData {
 		this.T4InputSemaphore = new Semaphore(0);
 
 		this.inputSyncObj = new Object();
-
+		
 		this.qLock = new ReentrantLock();
+		
+		this.qT1Semaphore = new Semaphore(0);
+		this.qT2Semaphore = new Semaphore(0);
+		this.qT3Semaphore = new Semaphore(0);
+		this.qT4Semaphore = new Semaphore(0);
 
 		this.T1FinishSemaphore = new Semaphore(0);
 		this.T3FinishSemaphore = new Semaphore(0);
@@ -288,6 +318,22 @@ class ParallelData {
 		return qLock;
 	}
 
+	Semaphore getQT1Semaphore() {
+		return qT1Semaphore;
+	}
+	
+	Semaphore getQT2Semaphore() {
+		return qT1Semaphore;
+	}
+	
+	Semaphore getQT3Semaphore() {
+		return qT1Semaphore;
+	}
+	
+	Semaphore getQT4Semaphore() {
+		return qT1Semaphore;
+	}
+	
 	Semaphore getT1FinishSemaphore() {
 		return T1FinishSemaphore;
 	}
@@ -318,6 +364,13 @@ class CommonData {
 
 	private Vector Z;
 
+	void init(int N) {
+		MR = Matrix.cleanMarix(N);
+		MB = Matrix.cleanMarix(N);
+		//MC = Matrix.cleanMarix(N);
+		MM = Matrix.cleanMarix(N);
+	}
+	
 	// змінні
 	int getValD() {
 		return d;

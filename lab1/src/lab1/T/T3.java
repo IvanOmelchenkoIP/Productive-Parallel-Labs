@@ -22,7 +22,7 @@ public class T3 extends Thread {
 			synchronized(data.getInputSyncObj()) {
 				MC = data.createMatrix("MC");
 			}
-			data.setMatrixMM(MC);
+			data.setMatrixMC(MC);
 		} catch (Exception ex) {
 			System.out.println("Неможливо продовжити виконання - " + ex);
 			return;
@@ -41,33 +41,33 @@ public class T3 extends Thread {
 		int MAX_H = H * 3 - 1;
 
 		int q3 = data.getVectorZ().getPartialVector(MIN_H, MAX_H).min();
-		System.out.println("q3 = " + q3);
 		data.getQLock().lock();
 		int q = data.getValQ();
 		data.setValQ(q > q3 ? q3 : q);
-		System.out.println("q = " + data.getValQ());
 		data.getQLock().unlock();
 
-		/*Matrix MR;
+		data.getQT3Semaphore().release(data.getRestThreadsAmount());
+		
 		try {
-			syncData.getMRinit().acquire();
-			MR = commonData.retrieveMR();
-			if (MR == null) {
-				MR = Matrix.cleanMarix(N);
-				commonData.setMR(MR);
-			}
+			data.getQT1Semaphore().acquire();
+			data.getQT2Semaphore().acquire();
+			data.getQT4Semaphore().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 			return;
-		} finally {
-			syncData.getMRinit().release();
 		}
-		
-		MR.insertIntoIndexes(MIN_H, MAX_H, commonData.retrieveMB()
-				.getMatrixProduct(commonData.retrieveMC().getMatrixProduct(commonData.retrieveMM().getPartialMatrix(MIN_H, MAX_H)))
-				.getNumberProduct(commonData.retrieveD())
-				.getMatrixSum(commonData.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(commonData.retrieveQ())));
+		System.out.println("q = " + data.getValQ());
+		System.out.println("T3 " + MIN_H + " " + MAX_H + "|" + (MAX_H - MIN_H + 1));
+		System.out.println("T3\n" + data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).toString());
 
-		syncData.getT3Finish().release();*/
+		Matrix MR = data.getMatrixMR();
+		MR.insertIntoIndexes(MIN_H, MAX_H,
+				data.getMatrixMB()
+						.getMatrixProduct(
+								data.getMatrixMC().getMatrixProduct(data.getMatrixMM().getPartialMatrix(MIN_H, MAX_H)))
+						.getNumberProduct(data.getValD()).getMatrixSum(
+								data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(data.getValQ())));
+	
+		data.getT3FinishSemaphore().release();
 	}
 }

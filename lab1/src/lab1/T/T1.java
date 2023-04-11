@@ -19,17 +19,17 @@ public class T1 extends Thread {
 	public void run() {
 		Matrix MB;
 		try {
-			synchronized(data.getInputSyncObj()) {
+			synchronized (data.getInputSyncObj()) {
 				MB = data.createMatrix("MB");
 			}
-			data.setMatrixMM(MB);
+			data.setMatrixMB(MB);
 		} catch (Exception ex) {
 			System.out.println("Неможливо продовжити виконання - " + ex);
 			return;
 		}
-		
+
 		data.getT1InputSemaphore().release(data.getRestThreadsAmount());
-		
+
 		try {
 			data.getT3InputSemaphore().acquire();
 			data.getT4InputSemaphore().acquire();
@@ -37,38 +37,59 @@ public class T1 extends Thread {
 			System.out.println(ex);
 			return;
 		}
-		
+
 		int MIN_H = 0;
 		int MAX_H = H - 1;
-		
+
 		int q1 = data.getVectorZ().getPartialVector(MIN_H, MAX_H).min();
-		System.out.println("q1 = " + q1);
 		data.getQLock().lock();
 		int q = data.getValQ();
 		data.setValQ(q > q1 ? q1 : q);
-		System.out.println("q = " + data.getValQ());
 		data.getQLock().unlock();
 
-		/*Matrix MR;
+		data.getQT1Semaphore().release(data.getRestThreadsAmount());
+
 		try {
-			syncData.getMRinit().acquire();
-			MR = commonData.retrieveMR();
-			if (MR == null) {
-				MR = Matrix.cleanMarix(N);
-				commonData.setMR(MR);
-			}
+			data.getQT2Semaphore().acquire();
+			data.getQT3Semaphore().acquire();
+			data.getQT4Semaphore().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 			return;
-		} finally {
-			syncData.getMRinit().release();
 		}
+
+		System.out.println("MC\n" + data.getMatrixMC().toString());
 		
-		MR.insertIntoIndexes(MIN_H, MAX_H, commonData.retrieveMB()
-				.getMatrixProduct(commonData.retrieveMC().getMatrixProduct(commonData.retrieveMM().getPartialMatrix(MIN_H, MAX_H)))
-				.getNumberProduct(commonData.retrieveD())
-				.getMatrixSum(commonData.retrieveMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(commonData.retrieveQ())));
-	
-		syncData.getT1Finish().release();*/
+		System.out.println("q = " + data.getValQ());
+		System.out.println("T1 " + MIN_H + " " + MAX_H + "|" + (MAX_H - MIN_H + 1));
+		System.out.println("T1\n" + data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).toString());
+
+		/*
+		 * System.out.println(data.getMatrixMC().toString());
+		 * System.out.println(data.getMatrixMC().getPartialMatrix(MIN_H,
+		 * MAX_H).toString()); System.out
+		 * .println(data.getMatrixMC().getPartialMatrix(MIN_H,
+		 * MAX_H).getNumberProduct(data.getValQ()).toString());
+		 */
+
+		/*
+		 * System.out.println(data.getMatrixMM().getPartialMatrix(MIN_H, MAX_H));
+		 * System.out.println("Multiply2\n" +
+		 * data.getMatrixMC().getMatrixProduct(data.getMatrixMM().getPartialMatrix(
+		 * MIN_H, MAX_H)).toString());
+		 * System.out.println(data.getMatrixMB().getMatrixProduct(
+		 * data.getMatrixMC().getMatrixProduct(data.getMatrixMM().getPartialMatrix(
+		 * MIN_H, MAX_H))).toString());
+		 */
+
+		Matrix MR = data.getMatrixMR();
+		MR.insertIntoIndexes(MIN_H, MAX_H,
+				data.getMatrixMB()
+						.getMatrixProduct(
+								data.getMatrixMC().getMatrixProduct(data.getMatrixMM().getPartialMatrix(MIN_H, MAX_H)))
+						.getNumberProduct(data.getValD()).getMatrixSum(
+								data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).getNumberProduct(data.getValQ())));
+
+		data.getT1FinishSemaphore().release();
 	}
 }
