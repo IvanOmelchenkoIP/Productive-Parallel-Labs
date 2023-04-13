@@ -30,16 +30,14 @@ public class Lab1 {
 			System.out.println(ex);
 			return;
 		};
-		
-		data.init();
-		
+			
 		final int H = N / P;
 		System.out.println(H);
 		
-		Thread t1 = new T1(N, H, data);
-		Thread t2 = new T2(N, H, data);
-		Thread t3 = new T3(N, H, data);
-		Thread t4 = new T4(N, H, data);
+		Thread t1 = new T1(H, data);
+		Thread t2 = new T2(H, data);
+		Thread t3 = new T3(H, data);
+		Thread t4 = new T4(H, data);
 		
 		t1.start();
 		t2.start();

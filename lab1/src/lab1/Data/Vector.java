@@ -1,4 +1,4 @@
-package lab1.Data.vector;
+package lab1.Data;
 
 public class Vector {
 

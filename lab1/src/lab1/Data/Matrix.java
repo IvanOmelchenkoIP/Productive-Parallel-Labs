@@ -1,6 +1,6 @@
-package lab1.Data.matrix;
+package lab1.Data;
 
-import lab1.Data.matrix.Matrix;
+import lab1.Data.Matrix;
 
 public class Matrix {
 
