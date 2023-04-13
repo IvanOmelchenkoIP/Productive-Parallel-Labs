@@ -1,5 +1,7 @@
 package lab1.T;
 
+import java.util.concurrent.BrokenBarrierException;
+
 import lab1.Data.Data;
 import lab1.Data.matrix.Matrix;
 import lab1.Data.vector.Vector;
@@ -57,15 +59,21 @@ public class T4 extends Thread {
 		data.setValQ(q > q4 ? q4 : q);
 		data.getQLock().unlock();
 		
-		data.getQT4Semaphore().release(data.getRestThreadsAmount());
+		//data.getQT4Semaphore().release(data.getRestThreadsAmount());
 		
-		try {
+		/*try {
 			data.getQT1Semaphore().acquire();
 			data.getQT2Semaphore().acquire();
 			data.getQT3Semaphore().acquire();
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 			return;
+		}*/
+		
+		try {
+			data.getQBarrier().await();
+		} catch (InterruptedException | BrokenBarrierException ex) {
+			System.out.println(ex);
 		}
 		System.out.println("q = " + data.getValQ());
 		System.out.println("T4 " + MIN_H + " " + MAX_H + "|" + (MAX_H - MIN_H + 1));

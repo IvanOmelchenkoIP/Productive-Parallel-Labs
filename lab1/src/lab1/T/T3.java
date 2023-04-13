@@ -1,5 +1,7 @@
 package lab1.T;
 
+import java.util.concurrent.BrokenBarrierException;
+
 import lab1.Data.Data;
 import lab1.Data.matrix.Matrix;
 
@@ -46,7 +48,7 @@ public class T3 extends Thread {
 		data.setValQ(q > q3 ? q3 : q);
 		data.getQLock().unlock();
 
-		data.getQT3Semaphore().release(data.getRestThreadsAmount());
+		/*data.getQT3Semaphore().release(data.getRestThreadsAmount());
 		
 		try {
 			data.getQT1Semaphore().acquire();
@@ -55,10 +57,16 @@ public class T3 extends Thread {
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 			return;
+		}*/
+		
+		try {
+			data.getQBarrier().await();
+		} catch (InterruptedException | BrokenBarrierException ex) {
+			System.out.println(ex);
 		}
 		System.out.println("q = " + data.getValQ());
-		System.out.println("T3 " + MIN_H + " " + MAX_H + "|" + (MAX_H - MIN_H + 1));
-		System.out.println("T3\n" + data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).toString());
+		/*System.out.println("T3 " + MIN_H + " " + MAX_H + "|" + (MAX_H - MIN_H + 1));
+		System.out.println("T3\n" + data.getMatrixMC().getPartialMatrix(MIN_H, MAX_H).toString());*/
 
 		Matrix MR = data.getMatrixMR();
 		MR.insertIntoIndexes(MIN_H, MAX_H,

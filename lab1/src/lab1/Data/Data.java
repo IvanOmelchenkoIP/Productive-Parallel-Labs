@@ -1,6 +1,7 @@
 package lab1.Data;
 
 import java.io.IOException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -163,20 +164,8 @@ public class Data {
 		return parallelData.getQLock();
 	}
 
-	public Semaphore getQT1Semaphore() {
-		return parallelData.getQT1Semaphore();
-	}
-	
-	public Semaphore getQT2Semaphore() {
-		return parallelData.getQT2Semaphore();
-	}
-	
-	public Semaphore getQT3Semaphore() {
-		return parallelData.getQT3Semaphore();
-	}
-	
-	public Semaphore getQT4Semaphore() {
-		return parallelData.getQT4Semaphore();
+	public CyclicBarrier getQBarrier() {
+		return parallelData.getQBarrier();
 	}
 	
 	public Semaphore getT1FinishSemaphore() {
@@ -268,10 +257,7 @@ class ParallelData {
 
 	private Semaphore MRInitSemaphore;
 	
-	private Semaphore qT1Semaphore;
-	private Semaphore qT2Semaphore;
-	private Semaphore qT3Semaphore;
-	private Semaphore qT4Semaphore;
+	private CyclicBarrier qBarrier;
 
 	private Semaphore T1FinishSemaphore;
 	private Semaphore T3FinishSemaphore;
@@ -288,10 +274,7 @@ class ParallelData {
 		
 		this.qLock = new ReentrantLock();
 		
-		this.qT1Semaphore = new Semaphore(0);
-		this.qT2Semaphore = new Semaphore(0);
-		this.qT3Semaphore = new Semaphore(0);
-		this.qT4Semaphore = new Semaphore(0);
+		this.qBarrier = new CyclicBarrier(4);
 
 		this.T1FinishSemaphore = new Semaphore(0);
 		this.T3FinishSemaphore = new Semaphore(0);
@@ -317,21 +300,9 @@ class ParallelData {
 	Lock getQLock() {
 		return qLock;
 	}
-
-	Semaphore getQT1Semaphore() {
-		return qT1Semaphore;
-	}
 	
-	Semaphore getQT2Semaphore() {
-		return qT1Semaphore;
-	}
-	
-	Semaphore getQT3Semaphore() {
-		return qT1Semaphore;
-	}
-	
-	Semaphore getQT4Semaphore() {
-		return qT1Semaphore;
+	CyclicBarrier getQBarrier() {
+		return qBarrier;
 	}
 	
 	Semaphore getT1FinishSemaphore() {
@@ -367,7 +338,7 @@ class CommonData {
 	void init(int N) {
 		MR = Matrix.cleanMarix(N);
 		MB = Matrix.cleanMarix(N);
-		//MC = Matrix.cleanMarix(N);
+		MC = Matrix.cleanMarix(N);
 		MM = Matrix.cleanMarix(N);
 	}
 	

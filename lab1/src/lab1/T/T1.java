@@ -1,5 +1,7 @@
 package lab1.T;
 
+import java.util.concurrent.BrokenBarrierException;
+
 import lab1.Data.Data;
 import lab1.Data.matrix.Matrix;
 
@@ -47,7 +49,7 @@ public class T1 extends Thread {
 		data.setValQ(q > q1 ? q1 : q);
 		data.getQLock().unlock();
 
-		data.getQT1Semaphore().release(data.getRestThreadsAmount());
+		/*data.getQT1Semaphore().release(data.getRestThreadsAmount());
 
 		try {
 			data.getQT2Semaphore().acquire();
@@ -56,6 +58,11 @@ public class T1 extends Thread {
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 			return;
+		}*/
+		try {
+			data.getQBarrier().await();
+		} catch (InterruptedException | BrokenBarrierException ex) {
+			System.out.println(ex);
 		}
 
 		System.out.println("MC\n" + data.getMatrixMC().toString());
