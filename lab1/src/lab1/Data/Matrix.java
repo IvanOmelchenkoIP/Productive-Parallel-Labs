@@ -1,3 +1,18 @@
+/*
+ * Лабораторна робота 1 ЛР1, Варіант - 10
+ * MR = MB*(MC*MM)*d + min(Z)*MC
+ * Введенні і виведення даних:
+ * T1: MB
+ * T2: MR
+ * T3: MC
+ * F3: d, Z, MM
+ * Омельченко І. ІП-04
+ * Дата відправлення: 15.04.2023 
+ * 
+ * файл: ./src/lab1/Data/Matrix.java
+ * Даний файл містить тип даних матриці
+ */
+
 package lab1.Data;
 
 import lab1.Data.Matrix;
@@ -41,6 +56,16 @@ public class Matrix {
 			MA += "\n";
 		}
 		return MA;
+	}
+	
+	public Matrix getCopy() {
+		int[][] dataMB = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				dataMB[i][j] = data[i][j];
+			}
+		}
+		return new Matrix(dataMB);
 	}
 	
 	public int[][] getData() {

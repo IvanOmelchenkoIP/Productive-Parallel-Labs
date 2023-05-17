@@ -1,3 +1,18 @@
+/*
+ * Лабораторна робота 1 ЛР1, Варіант - 10
+ * MR = MB*(MC*MM)*d + min(Z)*MC
+ * Введенні і виведення даних:
+ * T1: MB
+ * T2: MR
+ * T3: MC
+ * F3: d, Z, MM
+ * Омельченко І. ІП-04
+ * Дата відправлення: 15.04.2023 
+ * 
+ * файл: ./src/lab1/Data/Data.java
+ * Даний файл містить дані і допоміжні класи для створення різних необхідних типів даних
+ */
+
 package lab1.Data;
 
 import java.io.DataInputStream;
@@ -13,10 +28,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+// Допоміжний клас для зберігання різних типів генерації даних
 class DataGenerationTypes {
 	static final int USER_INPUT = 0, READ_FILE = 1, GENERATE_RANDOM = 2, FILL_WITH_NUMBER = 3;
 }
 
+// Клас, що містить дані, необхідні для виконання програми
 public class Data {
 
 	private final int MIN_N = 4;
@@ -35,14 +52,18 @@ public class Data {
 	private MatrixCreator mc;
 	private VectorCreator vc;
 
+	// атомарні змінні
 	private AtomicInteger q;
 	private AtomicInteger d;
+	
+	// вектори і матриці
 	private Vector Z;
 	private Matrix MB;
 	private Matrix MC;
 	private Matrix MM;
 	private Matrix MR;
 
+	// об'єкти для використання критичних секцй і семафори 
 	private Object inputSyncObj;
 	private Semaphore T1InputSemaphore;
 	private Semaphore T3InputSemaphore;
@@ -82,9 +103,9 @@ public class Data {
 	}
 
 	public int setUserN() throws IOException, Exception {
-		System.out.print("Введіть розмірність векторів та матриць N (N > 4): ");
+		System.out.print("Введіть розмірність векторів та матриць N (N >= 4): ");
 		N = ui.readNumber();
-		if (N <= MIN_N) {
+		if (N < MIN_N) {
 			throw new Exception("Неможливо продовжити виконання програми - невірне значення N!");
 		}
 		setUserInputType();
@@ -244,6 +265,7 @@ public class Data {
 	}
 }
 
+// Клас для читання вводу користувача
 class UserInputScanner {
 
 	private Scanner scanner;
@@ -263,6 +285,7 @@ class UserInputScanner {
 	}
 }
 
+// Клас для читання файлу
 class FileReader {
 
 	String read(String filename) throws IOException {
@@ -279,6 +302,7 @@ class FileReader {
 	}
 }
 
+// Клас для створення чисел
 class NumberCreator {
 
 	private UserInputScanner ui;
@@ -334,6 +358,7 @@ class NumberCreator {
 	}
 }
 
+// Кдас для створення матриць
 class MatrixCreator {
 
 	private UserInputScanner ui;
@@ -410,6 +435,7 @@ class MatrixCreator {
 	}
 }
 
+// Клас для створення векторів
 class VectorCreator {
 
 	private UserInputScanner ui;
